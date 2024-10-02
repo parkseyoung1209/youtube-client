@@ -1,6 +1,9 @@
 import { FaBars ,FaMagnifyingGlass } from "react-icons/fa6";
 import logo from "../assets/logo.svg";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Modal from "./Modal";
 
 const StyledHeader = styled.header `
 
@@ -81,8 +84,28 @@ const StyledHeader = styled.header `
     }
 `;
 
-const Header = () => {
+const Header = (onUpload) => {
+    const navigate = useNavigate();
+    const [token, setToken] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+    useEffect(() => {
+        setToken(localStorage.getItem("token"));
+    }, []);
+    const login = () => {
+        navigate("/login");
+    }
+    const logout = () => {
+        localStorage.removeItem("token");
+        setToken(null);
+    }
+    const open = () => {
+        setIsOpen(true);
+    }
+    const close = () => {
+        setIsOpen(false);
+    }
     return (
+        <>
         <StyledHeader>
             <div className="header-start">
                 <FaBars /> 
@@ -97,11 +120,19 @@ const Header = () => {
                 </button>
             </div>
             <div className="header-end">
-                <button type="button">
+                {token === null ? (
+                    <button type="button" onClick={login}>
                     로그인
                 </button>
+            ) : (<button type="button" onClick={logout}>
+                로그아웃
+            </button>)
+            }
+             <button type="button" onClick={open}>업로드</button>   
             </div>
       </StyledHeader>
+      <Modal isOpen={isOpen} onClose={close} onUpload={onUpload}/>
+      </>
     );
 };
 export default Header;

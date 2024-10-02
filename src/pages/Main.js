@@ -1,18 +1,9 @@
 import "../assets/style.css";
 import { FaHouse} from "react-icons/fa6";
 import { FaFolder } from "react-icons/fa";
-import { getVideos } from "../api/video";
-import { useState, useEffect } from "react";
-
+import { useOutletContext } from "react-router-dom";
 const Main = () => {
-    const [videos, setVideos] = useState([]);
-    const videoAPI = async () => {
-        const result = await getVideos();
-        setVideos(result.data);
-    };
-    useEffect(() => {
-        videoAPI();
-    }, []);
+	const {videos, onUpload} = useOutletContext();
     return (
         <main>
 		<aside>
@@ -36,11 +27,11 @@ const Main = () => {
 							<video src={video.videoUrl} controls></video>
 						</div>
 						<div className="video-info">
-							<img src="${video.channel.channelImg}" />
+							<img src={video.channel.channelImg} />
 							<div className="video-desc">
 								<h2>{video.videoTitle}</h2>
 								<p>{video.channel.channelName}</p>
-								<p className="video-meta" data-video-date="${video.videoDate}">
+								<p className="video-meta" data-video-date={video.videoDate}>
 									조회수 {video.videoCount}회ㆍ<span className="video-date"></span>
 								</p>
 							</div>

@@ -6,4 +6,12 @@ const instance = axios.create({
 
 export const getVideos = async() => {
     return await instance.get("video");
+};
+
+export const addVideo = async (data) => {
+    return await instance.post("video", data, {
+        headers: {
+            "Content-Type" : "multipart/form-data",
+        },
+    });
 }
