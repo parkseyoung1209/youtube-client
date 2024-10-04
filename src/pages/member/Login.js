@@ -2,55 +2,51 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import { useState } from "react";
 import { login } from "../../api/member";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth(); // login이 다른 함수명으로 있어서 이름을 변경
   const [member, setMember] = useState({
     id: "",
     password: "",
   });
-  const signup = () => {
-    navigate("/signup");
-  };
   const submit = async () => {
     const result = await login(member);
     try {
-      if(result.status === 200) {
-        localStorage.setItem("token",  result.data);
-        alert("로그인 성공");
+      if (result.status === 200) {
+        authLogin(result.data);
+        alert("로그인 성공!");
         navigate("/");
       }
     } catch {
-        alert("로그인 실패!");
+      alert("로그인 실패!");
     }
-  }
-  const google = async () => {
-    window.location.href="http://localhost:8080/oauth2/authorization/google";
-  }
+  };
+  const signup = () => {
+    navigate("/signup");
+  };
+  const google = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 shadow-md max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-8">로그인</h1>
         <div>
-          <Input 
+          <Input
             label="아이디"
             type="text"
-            placeholder="아이디 입력"
+            placeholder="아이디를 입력해주세요"
             value={member.id}
-            change={(e) => setMember({
-              ...member,
-              id : e.target.value
-            })}
+            change={(e) => setMember({ ...member, id: e.target.value })}
           />
-           <Input 
+          <Input
             label="비밀번호"
             type="password"
-            placeholder="비밀번호 입력"
+            placeholder="비밀번호를 입력해주세요"
             value={member.password}
-            change={(e) => setMember({
-              ...member,
-              password : e.target.value
-            })}
+            change={(e) => setMember({ ...member, password: e.target.value })}
           />
           <button
             type="button"

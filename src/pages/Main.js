@@ -2,8 +2,22 @@ import "../assets/style.css";
 import { FaHouse} from "react-icons/fa6";
 import { FaFolder } from "react-icons/fa";
 import { useOutletContext } from "react-router-dom";
+import { useEffect } from "react";
+
 const Main = () => {
-	const {videos, onUpload} = useOutletContext();
+	const {videos, setPage} = useOutletContext();
+	
+	const scroll = () => {
+		if(window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
+			setPage((page) => page +1);
+		}	
+	};
+	useEffect(() => {
+		window.addEventListener("scroll", scroll);
+		return () => {
+			window.removeEventListener("scroll", scroll);
+		}
+	}, [setPage]);
     return (
         <main>
 		<aside>
@@ -37,7 +51,7 @@ const Main = () => {
 							</div>
 						</div>
 					</div>
-				))};
+				))}
 			</section>
 		</div>
 	</main>
